@@ -14,7 +14,7 @@ Documentação do projeto desenvolvido como atividade da disciplina de APOO e Ba
 
 [Para mais detalhes, acesse o link](casos-de-uso.mb)
 
-[Para ver o diagrama de casos de uso, acesse o link](imagens/diagrama-casos-de-uso.png)
+[Para ver o diagrama de casos de uso, acesse o link](diagrama-casos-de-uso.png)
 
 ## Tecnologias Utilizadas
 - GitHub: Utilizado para hospedar o repositório do projeto e organizar toda a documentação.
