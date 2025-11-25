@@ -27,5 +27,5 @@ Documentação do projeto desenvolvido como atividade da disciplina de APOO e Ba
 |     Alunas     |   Matrícula   |
 | -------------- | ------------- |
 |Carolina Costa  |20241011110037 |
-|Eduarda Moura   |20241011110021 |
 |Eduarda Medeiros|20241011110014 |
+|Eduarda Moura   |20241011110021 |
