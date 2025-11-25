@@ -3,7 +3,7 @@
 Documentação do projeto desenvolvido como atividade da disciplina de APOO e Banco de Dados, no Curso Técnico em Desenvolvimento de Sistemas para Internet – IFRN - Campus Natal-Central.
 
 ## Visão do Produto
-[Para ver a visão do produto, acesse o link](visao-do-produto.md)
+[Para ver a visão do produto, acesse o link](visao-do-produto.pdf)
 
 ## Casos de Uso
 1 - Cadastrar Sala
@@ -12,9 +12,9 @@ Documentação do projeto desenvolvido como atividade da disciplina de APOO e Ba
 
 3 - Avaliar Solicitação de Reserva
 
-[Para mais detalhes, acesse o link](casos-de-uso.md)
+[Para mais detalhes, acesse o link](casos-de-uso.mb)
 
-[Para ver o diagrama de casos de uso, acesse o link](imagens/diagrama-casos-uso.png)
+[Para ver o diagrama de casos de uso, acesse o link](imagens/diagrama-casos-de-uso.png)
 
 ## Tecnologias Utilizadas
 - GitHub: Utilizado para hospedar o repositório do projeto e organizar toda a documentação.
