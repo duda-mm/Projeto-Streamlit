@@ -12,7 +12,7 @@ Documentação do projeto desenvolvido como atividade da disciplina de POO, APOO
 
 3 - Avaliar Solicitação de Reserva
 
-[Para mais detalhes, acesse o link](casos-de-uso.mb)
+[Para mais detalhes, acesse o link](casos-de-uso.md)
 
 [Para ver o diagrama de casos de uso, acesse o link](diagrama-casos-de-uso.png)
 
