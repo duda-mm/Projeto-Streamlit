@@ -1,6 +1,6 @@
 # Reserva de Salas
 ## Sistema de Gestão e Reserva de Salas
-Documentação do projeto desenvolvido como atividade da disciplina de APOO e Banco de Dados, no Curso Técnico em Desenvolvimento de Sistemas para Internet – IFRN - Campus Natal-Central.
+Documentação do projeto desenvolvido como atividade da disciplina de POO, APOO e Banco de Dados, no Curso Técnico em Desenvolvimento de Sistemas para Internet – IFRN - Campus Natal-Central.
 
 ## Visão do Produto
 [Para ver a visão do produto, acesse o link](visao-do-produto.pdf)
@@ -23,7 +23,7 @@ Documentação do projeto desenvolvido como atividade da disciplina de APOO e Ba
 
 - Astah: Essa ferramenta foi utilizada para desenhar os diagramas, como o Diagrama de Casos de Uso e o Modelo Conceitual.
 
-## Equipe:
+## Equipe
 |     Alunas     |   Matrícula   |
 | -------------- | ------------- |
 |Carolina Costa  |20241011110037 |
