@@ -73,35 +73,35 @@ Fluxo retorna ao passo de seleção da sala.
 #### Nome do Caso de Uso: 
 Gerenciar Reserva
 #### Atores Envolvidos: 
-Cliente 
+Usuário 
 #### Fluxo Principal de Eventos:
 A. Criar Reserva
 
-- O Cliente realiza login e acessa o calendário de disponibilidade.
+- O Usuário realiza login e acessa o calendário de disponibilidade.
 
-- O Cliente seleciona sala, data e horário.
+- O Usuário seleciona sala, data e horário.
 
-- O Cliente preenche informações adicionais.
+- O Usuário preenche informações adicionais.
 
 - O sistema verifica conflitos de horário.
 
 - Não havendo conflito, a reserva é registrada com status pendente.
 
-- O Cliente recebe notificação da criação.
+- O Usuário recebe notificação da criação.
 
 B. Visualizar Reservas
 
-- O Cliente acessa a área “Minhas Reservas”.
+- O Usuário acessa a área “Minhas Reservas”.
  
-- O sistema lista as reservas do cliente com status (pendente, aprovada, recusada).
+- O sistema lista as reservas do Usuário com status (pendente, aprovada, recusada).
 
 C. Atualizar Reserva
 
-- O Cliente seleciona uma reserva pendente ou aprovada.
+- O Usuário seleciona uma reserva pendente ou aprovada.
 
 - O sistema exibe os dados atuais.
 
-- O Cliente altera data, horário ou sala.
+- O Usuário altera data, horário ou sala.
 
 - O sistema verifica eventuais conflitos.
 
@@ -111,26 +111,26 @@ C. Atualizar Reserva
 
 D. Excluir/Cancelar Reserva
 
-- O Cliente seleciona uma reserva para cancelar.
+- O Usuário seleciona uma reserva para cancelar.
 
 - O sistema solicita confirmação.
 
-- O Cliente confirma.
+- O Usuário confirma.
 
 - O sistema altera o status para “Cancelada”.
 
 - O sistema libera aquele horário no calendário.
 #### Fluxos de Excessão:
 A. Conflito de Horário
-- Se o sistema detectar conflito ao criar ou atualizar a reserva, informa ao Cliente e retorna ao passo de seleção de horários.
+- Se o sistema detectar conflito ao criar ou atualizar a reserva, informa ao Usuário e retorna ao passo de seleção de horários.
 
 B. Atualização de Reserva Já Avaliada
-- Se a reserva já foi aprovada ou recusada, o sistema bloqueia alterações e avisa ao Cliente.
+- Se a reserva já foi aprovada ou recusada, o sistema bloqueia alterações e avisa ao Usuário.
 
 C. Tentativa de Cancelar Reserva Já Ocorrida
 - Se o horário já passou, o sistema impede o cancelamento.
 #### Pré-condições:
-- O Cliente deve estar autenticado no sistema.
+- O Usuário deve estar autenticado no sistema.
 
 - Deve haver salas previamente cadastradas.
 
@@ -138,7 +138,7 @@ C. Tentativa de Cancelar Reserva Já Ocorrida
 #### Pós-condições:
 - Uma reserva pode ser criada, visualizada, atualizada ou cancelada.
 
-- A disponibilidade das salas é atualizada conforme as ações do Cliente.
+- A disponibilidade das salas é atualizada conforme as ações do Usuário.
 
 ### 3 - Avaliar Solicitação de Reserva
 
@@ -157,7 +157,7 @@ Avaliador
 
 - O sistema atualiza o status da reserva para "Aprovada" ou "Recusada".
 
-- O sistema notifica o Cliente sobre a decisão.
+- O sistema notifica o Usuário sobre a decisão.
 #### Fluxos de Excessão: 
 Nenhum fluxo de excessão identificado neste caso de uso.
 #### Pré-condições:
@@ -176,9 +176,9 @@ Nenhum fluxo de excessão identificado neste caso de uso.
 #### Nome do Caso de Uso: 
 Realizar Login
 #### Atores Envolvidos:
-Cliente, Avaliador, Administrador
+Usuário, Avaliador, Administrador
 #### Fluxo Principal de Eventos:
-- O usuário (Cliente, Avaliador ou Administrador) acessa a tela de login do sistema.
+- O usuário (Usuário, Avaliador ou Administrador) acessa a tela de login do sistema.
 
 - O sistema exibe os campos para inserção de e-mail/usuário e senha.
 
@@ -188,7 +188,7 @@ Cliente, Avaliador, Administrador
   
 - Estando corretas, o sistema autentica o usuário.
 
-- O sistema redireciona o usuário para a área correspondente ao seu perfil (Cliente, Avaliador ou Administrador).
+- O sistema redireciona o usuário para a área correspondente ao seu perfil (Usuário, Avaliador ou Administrador).
 #### Fluxos de Excessão: 
 A. Credenciais Inválidas:
 - Se o usuário inserir e-mail/usuário ou senha incorretos, o sistema exibirá uma mensagem informando que as credenciais são inválidas.
