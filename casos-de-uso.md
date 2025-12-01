@@ -1,9 +1,9 @@
 # Reserva de Salas
 ## Casos de Uso
-### 1 - Cadastrar Salas
+### 1 - Gerenciar Sala
 
 #### Nome do Caso de Uso: 
-Realizar Cadastro
+Gerenciar Sala
 #### Atores Envolvidos: 
 Administrador 
 #### Fluxo Principal de Eventos:
@@ -25,10 +25,10 @@ A. Dados Inválidos: Se o Administrador submeter o formulário com dados incompl
 #### Pós-condições:
 - Uma nova sala é cadastrada no sistema e fica disponível para ser reservada.
 
-### 2 - Solicitar Reserva
+### 2 - Gerenciar Reserva
 
 #### Nome do Caso de Uso: 
-Solicitar Reserva
+Gerenciar Reserva
 #### Atores Envolvidos: 
 Cliente 
 #### Fluxo Principal de Eventos:
@@ -55,7 +55,7 @@ A. Conflito de Horário: Se o sistema detectar um conflito de horário no passo 
 ### 3 - Avaliar Solicitação de Reserva
 
 #### Nome do Caso de Uso: 
-Avaliar Solicitação
+Avaliar Solicitação de Reserva
 #### Atores Envolvidos:
 Avaliador 
 #### Fluxo Principal de Eventos:
@@ -83,3 +83,43 @@ Nenhum fluxo de excessão identificado neste caso de uso.
 - A solicitação de reserva tem seu status atualizado para "Aprovada" ou "Recusada".
 
 - Se aprovada, a reserva é confirmada e o horário bloqueado no calendário. Se recusada, o horário volta a ficar disponível.
+
+### 4 - Realizar Login
+
+#### Nome do Caso de Uso: 
+Realizar Login
+#### Atores Envolvidos:
+Cliente, Avaliador, Administrador
+#### Fluxo Principal de Eventos:
+- O usuário (Cliente, Avaliador ou Administrador) acessa a tela de login do sistema.
+
+- O sistema exibe os campos para inserção de e-mail/usuário e senha.
+
+- O usuário insere suas credenciais e confirma a ação clicando em "Entrar".
+
+- O sistema valida as credenciais inseridas.
+  
+- Estando corretas, o sistema autentica o usuário.
+
+- O sistema redireciona o usuário para a área correspondente ao seu perfil (Cliente, Avaliador ou Administrador).
+#### Fluxos de Excessão: 
+A. Credenciais Inválidas:
+Se o usuário inserir e-mail/usuário ou senha incorretos, o sistema exibirá uma mensagem informando que as credenciais são inválidas.
+O fluxo retorna ao passo 2.
+
+B. Conta Inexistente ou Desativada:
+Se o usuário tentar fazer login com uma conta que não existe ou que foi desativada, o sistema exibirá uma mensagem informando a situação.
+O fluxo retorna ao passo 2.
+
+C. Campos Vazios:
+Se o usuário tentar confirmar o login sem preencher todos os campos obrigatórios, o sistema informará que os dados são obrigatórios.
+O fluxo retorna ao passo 2.
+#### Pré-condições:
+- O usuário deve já possuir um cadastro ativo no sistema.
+
+- O sistema deve estar disponível e funcional.
+
+#### Pós-condições:
+- O usuário passa a estar autenticado no sistema.
+
+- O sistema libera acesso às funcionalidades de acordo com o perfil do usuário.
