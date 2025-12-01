@@ -7,50 +7,138 @@ Gerenciar Sala
 #### Atores Envolvidos: 
 Administrador 
 #### Fluxo Principal de Eventos:
-- O Administrador acessa a área de gerenciamento de salas do sistema.
+A. Criar Sala
 
-- O sistema exibe um formulário para o cadastro de uma nova sala.
+- O Administrador acessa a área de gerenciamento de salas.
 
-- O Administrador preenche os dados da sala, como nome, capacidade, descrição e recursos disponíveis (projetor, ar-condicionado, etc.).
+- O sistema exibe um formulário para cadastrar uma nova sala.
+
+- O Administrador preenche os dados da sala (nome, capacidade, recursos, descrição).
 
 - O Administrador confirma o cadastro.
 
-- O sistema valida as informações e salva a nova sala no banco de dados.
+- O sistema valida e salva a sala no banco de dados.
 
-- O sistema exibe uma mensagem de sucesso, e a nova sala fica disponível para consultas e reservas.
+- O sistema exibe mensagem de sucesso.
+
+B. Visualizar Salas
+
+- O Administrador acessa a lista de salas cadastradas.
+
+- O sistema exibe todas as salas com informações como nome, capacidade e recursos.
+
+C. Atualizar Sala
+
+- O Administrador seleciona uma sala para editar.
+
+- O sistema exibe os dados atuais da sala.
+
+- O Administrador altera os campos desejados.
+
+- O Administrador confirma a atualização.
+
+- O sistema valida e salva as alterações.
+
+- O sistema exibe mensagem de sucesso.
+
+D. Excluir Sala
+
+- O Administrador seleciona uma sala para excluir.
+
+- O sistema solicita confirmação.
+
+- O Administrador confirma.
+
+- O sistema exclui a sala do banco de dados.
+
+- O sistema exibe mensagem de sucesso.
 #### Fluxos de Excessão:
-A. Dados Inválidos: Se o Administrador submeter o formulário com dados incompletos ou em formato incorreto, o sistema exibirá uma mensagem de erro indicando os campos que precisam ser corrigidos. O fluxo retorna ao passo 3.
+A. Dados Inválidos no Cadastro ou Atualização
+- Se o Administrador enviar dados incompletos ou incorretos, o sistema avisa quais campos precisam ser corrigidos. O fluxo retorna ao passo de edição/preenchimento.
+
+B. Exclusão de Sala Com Reservas Ativas
+- Se a sala possuir reservas futuras, o sistema impede a exclusão e informa ao Administrador.
+Fluxo retorna ao passo de seleção da sala.
 #### Pré-condições:
-- O Administrador deve estar autenticado no sistema (ter realizado login).
+- O Administrador deve estar autenticado.
+
+- O sistema deve estar funcionando e com acesso ao banco de dados.
 #### Pós-condições:
-- Uma nova sala é cadastrada no sistema e fica disponível para ser reservada.
+- Uma sala pode ser criada, visualizada, atualizada ou excluída conforme a ação realizada.
+
+- As alterações ficam imediatamente disponíveis no sistema.
 
 ### 2 - Gerenciar Reserva
 
 #### Nome do Caso de Uso: 
 Gerenciar Reserva
 #### Atores Envolvidos: 
-Cliente 
+Usuário 
 #### Fluxo Principal de Eventos:
-- O Cliente, após realizar o login, acessa a funcionalidade para visualizar a disponibilidade das salas , geralmente por meio de um calendário.
+A. Criar Reserva
 
-- O Cliente seleciona a sala, a data e o horário desejados.
+- O Usuário realiza login e acessa o calendário de disponibilidade.
 
-- O Cliente preenche informações adicionais, se necessário, e confirma a solicitação de reserva.
+- O Usuário seleciona sala, data e horário.
 
-- O sistema verifica automaticamente se há conflito de horário com outras reservas já existentes para aquela sala.
+- O Usuário preenche informações adicionais.
 
-- Não havendo conflito, o sistema registra a solicitação com o status "pendente de avaliação".
+- O sistema verifica conflitos de horário.
 
-- O sistema notifica o Cliente de que a solicitação foi enviada e está aguardando aprovação.
+- Não havendo conflito, a reserva é registrada com status pendente.
 
+- O Usuário recebe notificação da criação.
+
+B. Visualizar Reservas
+
+- O Usuário acessa a área “Minhas Reservas”.
+ 
+- O sistema lista as reservas do Usuário com status (pendente, aprovada, recusada).
+
+C. Atualizar Reserva
+
+- O Usuário seleciona uma reserva pendente ou aprovada.
+
+- O sistema exibe os dados atuais.
+
+- O Usuário altera data, horário ou sala.
+
+- O sistema verifica eventuais conflitos.
+
+- Estando tudo correto, o sistema salva as atualizações.
+
+- O sistema exibe mensagem de sucesso.
+
+D. Excluir/Cancelar Reserva
+
+- O Usuário seleciona uma reserva para cancelar.
+
+- O sistema solicita confirmação.
+
+- O Usuário confirma.
+
+- O sistema altera o status para “Cancelada”.
+
+- O sistema libera aquele horário no calendário.
 #### Fluxos de Excessão:
-A. Conflito de Horário: Se o sistema detectar um conflito de horário no passo 4, ele informará ao Cliente que o período selecionado não está disponível. O fluxo retorna ao passo 2, para que o Cliente possa escolher outro horário.
+A. Conflito de Horário
+- Se o sistema detectar conflito ao criar ou atualizar a reserva, informa ao Usuário e retorna ao passo de seleção de horários.
+
+B. Atualização de Reserva Já Avaliada
+- Se a reserva já foi aprovada ou recusada, o sistema bloqueia alterações e avisa ao Usuário.
+
+C. Tentativa de Cancelar Reserva Já Ocorrida
+- Se o horário já passou, o sistema impede o cancelamento.
 #### Pré-condições:
-- O Cliente deve estar autenticado no sistema.
-- Deve haver salas cadastradas no sistema.
+- O Usuário deve estar autenticado no sistema.
+
+- Deve haver salas previamente cadastradas.
+
+- O sistema deve estar operacional.
 #### Pós-condições:
-- Uma nova solicitação de reserva é registrada no sistema com status "pendente".
+- Uma reserva pode ser criada, visualizada, atualizada ou cancelada.
+
+- A disponibilidade das salas é atualizada conforme as ações do Usuário.
 
 ### 3 - Avaliar Solicitação de Reserva
 
@@ -69,7 +157,7 @@ Avaliador
 
 - O sistema atualiza o status da reserva para "Aprovada" ou "Recusada".
 
-- O sistema notifica o Cliente sobre a decisão.
+- O sistema notifica o Usuário sobre a decisão.
 #### Fluxos de Excessão: 
 Nenhum fluxo de excessão identificado neste caso de uso.
 #### Pré-condições:
@@ -78,7 +166,6 @@ Nenhum fluxo de excessão identificado neste caso de uso.
 - Deve existir pelo menos uma solicitação de reserva com status "pendente".
 
 - O usuário deve ter sido designado como Avaliador por um Administrador.
-
 #### Pós-condições:
 - A solicitação de reserva tem seu status atualizado para "Aprovada" ou "Recusada".
 
@@ -89,9 +176,9 @@ Nenhum fluxo de excessão identificado neste caso de uso.
 #### Nome do Caso de Uso: 
 Realizar Login
 #### Atores Envolvidos:
-Cliente, Avaliador, Administrador
+Usuário, Avaliador, Administrador
 #### Fluxo Principal de Eventos:
-- O usuário (Cliente, Avaliador ou Administrador) acessa a tela de login do sistema.
+- O usuário (Usuário, Avaliador ou Administrador) acessa a tela de login do sistema.
 
 - O sistema exibe os campos para inserção de e-mail/usuário e senha.
 
@@ -101,19 +188,22 @@ Cliente, Avaliador, Administrador
   
 - Estando corretas, o sistema autentica o usuário.
 
-- O sistema redireciona o usuário para a área correspondente ao seu perfil (Cliente, Avaliador ou Administrador).
+- O sistema redireciona o usuário para a área correspondente ao seu perfil (Usuário, Avaliador ou Administrador).
 #### Fluxos de Excessão: 
 A. Credenciais Inválidas:
-Se o usuário inserir e-mail/usuário ou senha incorretos, o sistema exibirá uma mensagem informando que as credenciais são inválidas.
-O fluxo retorna ao passo 2.
+- Se o usuário inserir e-mail/usuário ou senha incorretos, o sistema exibirá uma mensagem informando que as credenciais são inválidas.
+- 
+- O fluxo retorna ao passo 2.
 
 B. Conta Inexistente ou Desativada:
-Se o usuário tentar fazer login com uma conta que não existe ou que foi desativada, o sistema exibirá uma mensagem informando a situação.
-O fluxo retorna ao passo 2.
+- Se o usuário tentar fazer login com uma conta que não existe ou que foi desativada, o sistema exibirá uma mensagem informando a situação.
+
+- O fluxo retorna ao passo 2.
 
 C. Campos Vazios:
-Se o usuário tentar confirmar o login sem preencher todos os campos obrigatórios, o sistema informará que os dados são obrigatórios.
-O fluxo retorna ao passo 2.
+- Se o usuário tentar confirmar o login sem preencher todos os campos obrigatórios, o sistema informará que os dados são obrigatórios.
+
+- O fluxo retorna ao passo 2.
 #### Pré-condições:
 - O usuário deve já possuir um cadastro ativo no sistema.
 
