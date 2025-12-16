@@ -6,7 +6,9 @@ Documentação do projeto desenvolvido como atividade da disciplina de POO, APOO
 [Para ver a visão do produto, acesse o link](visao-do-produto.pdf)
 
 ## Casos de Uso
-[Para ver o diagrama de casos de uso, acesse o link](diagrama-casos-de-uso.png)
+[Para mais detalhes, acesse o link](casos-de-uso.md)
+
+[Para ver o diagrama de casos de uso, acesse o link](diagramas/diagrama-casos-de-uso.png)
 
 ## Tecnologias Utilizadas
 - GitHub: Utilizado para hospedar o repositório do projeto e organizar toda a documentação.
