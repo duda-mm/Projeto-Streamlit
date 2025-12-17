@@ -34,8 +34,7 @@ class AdminSalasUI:
                 submitted = st.form_submit_button("Salvar Sala")
                 if submitted:
                     controller.criar_sala(nome, cap, desc)
-                    st.success("Sala criada com sucesso!")
-                    st.rerun()
+                    # Controller já lida com sucesso/reload
 
         with tab_atualizar:
             st.subheader("Atualizar Sala")
@@ -61,12 +60,8 @@ class AdminSalasUI:
                         nova_desc = st.text_area("Nova Descrição", value=sala_atual.descricao if hasattr(sala_atual, 'descricao') else "")
                         
                         if st.form_submit_button("Confirmar Alterações"):
-                            if hasattr(controller, 'atualizar_sala'):
-                                controller.atualizar_sala(id_sel_upd, novo_nome, nova_cap, nova_desc)
-                                st.success("Sala atualizada!")
-                                st.rerun()
-                            else:
-                                st.error("Método 'atualizar_sala' não encontrado no controller.")
+                            # CORREÇÃO: Chamada direta sem verificar hasattr, pois o método agora existe
+                            controller.atualizar_sala(id_sel_upd, novo_nome, nova_cap, nova_desc)
 
         with tab_excluir:
             st.subheader("Excluir Sala")
@@ -87,9 +82,5 @@ class AdminSalasUI:
                 if id_sel_del:
                     st.markdown(f"Tem certeza que deseja excluir **{opcoes_salas[id_sel_del]}**?")
                     if st.button("Confirmar Exclusão", type="primary"):
-                        try:
-                            controller.excluir_sala(id_sel_del)
-                            st.success("Sala excluída com sucesso!")
-                            st.rerun()
-                        except Exception as e: 
-                            st.error("Não é possível excluir uma sala que já foi reservada.")
+                        
+                        controller.excluir_sala(id_sel_del)

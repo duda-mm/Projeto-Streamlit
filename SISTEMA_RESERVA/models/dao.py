@@ -66,6 +66,19 @@ class SalaDAO:
             return True, "Sala salva com sucesso!"
         except Exception as e: return False, str(e)
         finally: conn.close()
+    
+    
+    def atualizar(self, sala):
+        conn = self.db_manager.conectar()
+        try:
+            sql = "UPDATE Sala SET nome = ?, capacidade = ?, descricao = ? WHERE id_sala = ?"
+            conn.execute(sql, (sala.nome, sala.capacidade, sala.descricao, sala.id_sala))
+            conn.commit()
+            return True, "Sala atualizada com sucesso!"
+        except Exception as e: return False, f"Erro ao atualizar: {str(e)}"
+        finally: conn.close()
+   
+
     def excluir(self, id_sala):
         conn = self.db_manager.conectar()
         cursor = conn.cursor()

@@ -23,7 +23,6 @@ class SistemaController:
         st.rerun()
 
     def _formatar_df(self, df):
-
         if df.empty:
             return df
       
@@ -35,18 +34,14 @@ class SistemaController:
             df['data_fim'] = pd.to_datetime(df['data_fim'])
             df['Fim'] = df['data_fim'].dt.strftime('%d/%m/%Y %H:%M')
 
-        
         colunas_visiveis = [col for col in ['id_reserva', 'Usuario', 'Sala', 'Início', 'Fim', 'status'] if col in df.columns]
         
-       
         df_final = df[colunas_visiveis].rename(columns={
             'id_reserva': 'ID',
             'status': 'Status'
         })
-        
         return df_final
 
-  
     def tentar_login(self, email, senha):
         usuario = self.usuario_dao.autenticar(email, senha)
         if usuario:
@@ -65,7 +60,6 @@ class SistemaController:
         if sucesso: self._sucesso_e_reload(msg)
         else: st.error(msg)
 
-
     def obter_salas(self): return self.sala_dao.listar_todas()
     def obter_salas_df(self): return self.sala_dao.listar_todas_df()
 
@@ -73,19 +67,26 @@ class SistemaController:
         sucesso, msg = self.sala_dao.inserir(Sala(None, nome, cap, desc))
         if sucesso: self._sucesso_e_reload(msg)
         else: st.error(msg)
+        
+    # --- MÉTODO NOVO PARA ATUALIZAR SALA ---
+    def atualizar_sala(self, id_sala, nome, cap, desc):
+        # Cria objeto sala com o ID para atualizar
+        sala = Sala(id_sala, nome, cap, desc)
+        sucesso, msg = self.sala_dao.atualizar(sala)
+        if sucesso: self._sucesso_e_reload(msg)
+        else: st.error(msg)
+    # ---------------------------------------
 
     def excluir_sala(self, id_sala):
         sucesso, msg = self.sala_dao.excluir(id_sala)
         if sucesso: self._sucesso_e_reload(msg)
-        else: st.error(msg)
+        else: st.error(msg) # Aqui o controller exibe a mensagem de erro retornada pelo DAO
 
     def criar_reserva(self, id_user, sala, data, ini, fim):
-      
         if str(ini) >= str(fim): 
             st.error("Horário inválido: Fim deve ser maior que início.")
             return
 
-       
         fuso_brasilia = timezone(timedelta(hours=-3))
         agora_brasilia = datetime.now(fuso_brasilia).replace(tzinfo=None)
         
@@ -102,7 +103,6 @@ class SistemaController:
         if sucesso: self._sucesso_e_reload(msg)
         else: st.error(msg)
 
-  
     def obter_minhas_reservas(self, id): 
         df = self.reserva_dao.listar_por_usuario(id)
         return self._formatar_df(df)
