@@ -19,7 +19,7 @@ A. Criar Sala
 
 5. [OUT] O sistema valida e salva a sala no banco de dados.
 
-6. [OUT] O sistema exibe mensagem de sucesso.
+6. [OUT] O sistema exibe mensagem de sucesso "Sala criada com sucesso".
 
 B. Visualizar Salas
 
@@ -39,7 +39,7 @@ C. Atualizar Sala
 
 5. [OUT] O sistema valida e salva as alterações.
 
-6. [OUT] O sistema exibe mensagem de sucesso.
+6. [OUT] O sistema exibe mensagem de sucesso "Sala atualizada com sucesso".
 
 D. Excluir Sala
 
@@ -51,7 +51,7 @@ D. Excluir Sala
 
 4. [OUT] O sistema exclui a sala do banco de dados.
 
-- O sistema exibe mensagem de sucesso.
+5. [out] O sistema exibe mensagem de sucesso "Sala excluida com sucesso".
 #### Fluxos de Excessão:
 A. Dados Inválidos no Cadastro ou Atualização
 - Se o Administrador enviar dados incompletos ou incorretos, o sistema avisa quais campos precisam ser corrigidos. O fluxo retorna ao passo de edição/preenchimento.
@@ -107,7 +107,7 @@ C. Atualizar Reserva
 
 5. [OUT] Estando tudo correto, o sistema salva as atualizações.
 
-6. [OUT] O sistema exibe mensagem de sucesso.
+6. [OUT] O sistema exibe mensagem de sucesso "Reserva atualizada com sucesso".
 
 D. Excluir/Cancelar Reserva
 
