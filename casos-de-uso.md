@@ -9,49 +9,49 @@ Administrador
 #### Fluxo Principal de Eventos:
 A. Criar Sala
 
-- O Administrador acessa a área de gerenciamento de salas.
+1. [IN] O Administrador acessa a área de gerenciamento de salas.
 
-- O sistema exibe um formulário para cadastrar uma nova sala.
+2. [OUT] O sistema exibe um formulário para cadastrar uma nova sala.
 
-- O Administrador preenche os dados da sala (nome, capacidade, recursos, descrição).
+3. [IN] O Administrador preenche os dados da sala (nome, capacidade, recursos, descrição).
 
-- O Administrador confirma o cadastro.
+4. [IN] O Administrador confirma o cadastro.
 
-- O sistema valida e salva a sala no banco de dados.
+5. [OUT] O sistema valida e salva a sala no banco de dados.
 
-- O sistema exibe mensagem de sucesso.
+6. [OUT] O sistema exibe mensagem de sucesso "Sala criada com sucesso".
 
 B. Visualizar Salas
 
-- O Administrador acessa a lista de salas cadastradas.
+1. [IN] O Administrador acessa a lista de salas cadastradas.
 
-- O sistema exibe todas as salas com informações como nome, capacidade e recursos.
+2. [OUT] O sistema exibe todas as salas com informações como nome, capacidade e recursos.
 
 C. Atualizar Sala
 
-- O Administrador seleciona uma sala para editar.
+1. [IN] O Administrador seleciona uma sala para editar.
 
-- O sistema exibe os dados atuais da sala.
+2. [OUT] O sistema exibe os dados atuais da sala.
 
-- O Administrador altera os campos desejados.
+3. [IN] O Administrador altera os campos desejados.
 
-- O Administrador confirma a atualização.
+4. [IN] O Administrador confirma a atualização.
 
-- O sistema valida e salva as alterações.
+5. [OUT] O sistema valida e salva as alterações.
 
-- O sistema exibe mensagem de sucesso.
+6. [OUT] O sistema exibe mensagem de sucesso "Sala atualizada com sucesso".
 
 D. Excluir Sala
 
-- O Administrador seleciona uma sala para excluir.
+1. [IN] O Administrador seleciona uma sala para excluir.
 
-- O sistema solicita confirmação.
+2. [OUT] O sistema solicita confirmação.
 
-- O Administrador confirma.
+3. [IN] O Administrador confirma.
 
-- O sistema exclui a sala do banco de dados.
+4. [OUT] O sistema exclui a sala do banco de dados.
 
-- O sistema exibe mensagem de sucesso.
+5. [out] O sistema exibe mensagem de sucesso "Sala excluida com sucesso".
 #### Fluxos de Excessão:
 A. Dados Inválidos no Cadastro ou Atualização
 - Se o Administrador enviar dados incompletos ou incorretos, o sistema avisa quais campos precisam ser corrigidos. O fluxo retorna ao passo de edição/preenchimento.
@@ -77,49 +77,49 @@ Usuário
 #### Fluxo Principal de Eventos:
 A. Criar Reserva
 
-- O Usuário realiza login e acessa o calendário de disponibilidade.
+1. [IN] O Usuário realiza login e acessa o calendário de disponibilidade.
 
-- O Usuário seleciona sala, data e horário.
+2. [IN] O Usuário seleciona sala, data e horário.
 
-- O Usuário preenche informações adicionais.
+3. [IN] O Usuário preenche informações adicionais.
 
-- O sistema verifica conflitos de horário.
+4. [OUT] O sistema verifica conflitos de horário.
 
-- Não havendo conflito, a reserva é registrada com status pendente.
+5. [OUT] Não havendo conflito, a reserva é registrada com status pendente.
 
-- O Usuário recebe notificação da criação.
+6. [IN] O Usuário recebe notificação da criação.
 
 B. Visualizar Reservas
 
-- O Usuário acessa a área “Minhas Reservas”.
+1. [IN] O Usuário acessa a área “Minhas Reservas”.
  
-- O sistema lista as reservas do Usuário com status (pendente, aprovada, recusada).
+2. [OUT] O sistema lista as reservas do Usuário com status (pendente, aprovada, recusada).
 
 C. Atualizar Reserva
 
-- O Usuário seleciona uma reserva pendente ou aprovada.
+1. [IN] O Usuário seleciona uma reserva pendente ou aprovada.
 
-- O sistema exibe os dados atuais.
+2. [OUT] O sistema exibe os dados atuais.
 
-- O Usuário altera data, horário ou sala.
+3. [IN] O Usuário altera data, horário ou sala.
 
-- O sistema verifica eventuais conflitos.
+4. [OUT] O sistema verifica eventuais conflitos.
 
-- Estando tudo correto, o sistema salva as atualizações.
+5. [OUT] Estando tudo correto, o sistema salva as atualizações.
 
-- O sistema exibe mensagem de sucesso.
+6. [OUT] O sistema exibe mensagem de sucesso "Reserva atualizada com sucesso".
 
 D. Excluir/Cancelar Reserva
 
-- O Usuário seleciona uma reserva para cancelar.
+1. [IN] O Usuário seleciona uma reserva para cancelar.
 
-- O sistema solicita confirmação.
+2. [OUT] O sistema solicita confirmação.
 
-- O Usuário confirma.
+3. [IN] O Usuário confirma.
 
-- O sistema altera o status para “Cancelada”.
+4. [OUT] O sistema altera o status para “Cancelada”.
 
-- O sistema libera aquele horário no calendário.
+5. [OUT] O sistema libera aquele horário no calendário.
 #### Fluxos de Excessão:
 A. Conflito de Horário
 - Se o sistema detectar conflito ao criar ou atualizar a reserva, informa ao Usuário e retorna ao passo de seleção de horários.
@@ -147,17 +147,17 @@ Avaliar Solicitação de Reserva
 #### Atores Envolvidos:
 Avaliador 
 #### Fluxo Principal de Eventos:
-- O Avaliador acessa o painel de solicitações de reserva pendentes.
+1. [IN] O Avaliador acessa o painel de solicitações de reserva pendentes.
 
-- O sistema exibe uma lista de solicitações aguardando avaliação.
+2. [OUT] O sistema exibe uma lista de solicitações aguardando avaliação.
 
-- O Avaliador seleciona uma solicitação para analisar os detalhes (sala, horário, solicitante).
+3. [IN] O Avaliador seleciona uma solicitação para analisar os detalhes (sala, horário, solicitante).
 
-- O Avaliador decide se aprova ou recusa a solicitação.
+4. [IN] O Avaliador decide se aprova ou recusa a solicitação.
 
-- O sistema atualiza o status da reserva para "Aprovada" ou "Recusada".
+5. [OUT] O sistema atualiza o status da reserva para "Aprovada" ou "Recusada".
 
-- O sistema notifica o Usuário sobre a decisão.
+6. [OUT] O sistema notifica o Usuário sobre a decisão.
 #### Fluxos de Excessão: 
 Nenhum fluxo de excessão identificado neste caso de uso.
 #### Pré-condições:
@@ -178,21 +178,21 @@ Realizar Login
 #### Atores Envolvidos:
 Usuário, Avaliador, Administrador
 #### Fluxo Principal de Eventos:
-- O usuário (Usuário, Avaliador ou Administrador) acessa a tela de login do sistema.
+1. [IN] O usuário (Usuário, Avaliador ou Administrador) acessa a tela de login do sistema.
 
-- O sistema exibe os campos para inserção de e-mail/usuário e senha.
+2. [OUT] O sistema exibe os campos para inserção de e-mail/usuário e senha.
 
-- O usuário insere suas credenciais e confirma a ação clicando em "Entrar".
+3. [IN] O usuário insere suas credenciais e confirma a ação clicando em "Entrar".
 
-- O sistema valida as credenciais inseridas.
+4. [OUT] O sistema valida as credenciais inseridas.
   
-- Estando corretas, o sistema autentica o usuário.
+5. [OUT] Estando corretas, o sistema autentica o usuário.
 
-- O sistema redireciona o usuário para a área correspondente ao seu perfil (Usuário, Avaliador ou Administrador).
+6. [OUT] O sistema redireciona o usuário para a área correspondente ao seu perfil (Usuário, Avaliador ou Administrador).
 #### Fluxos de Excessão: 
 A. Credenciais Inválidas:
 - Se o usuário inserir e-mail/usuário ou senha incorretos, o sistema exibirá uma mensagem informando que as credenciais são inválidas.
-- 
+
 - O fluxo retorna ao passo 2.
 
 B. Conta Inexistente ou Desativada:
