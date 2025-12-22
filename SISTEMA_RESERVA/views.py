@@ -3,9 +3,10 @@ import pandas as pd
 import time
 from datetime import datetime, timedelta, timezone
 from models.banco import BancoDados
-from models.dao import UsuarioDAO, SalaDAO, ReservaDAO
+from models.dao import UsuarioDAO, SalaDAO, ReservaDAO, EspacoDAO, AvaliadorDAO
 from models.usuario import Usuario
 from models.sala import Sala
+from models.reserva import Reserva
 
 class SistemaController:
     def __init__(self):
@@ -14,8 +15,8 @@ class SistemaController:
         self.usuario_dao = UsuarioDAO(self.db)
         self.sala_dao = SalaDAO(self.db)
         self.reserva_dao = ReservaDAO(self.db)
-        self.sala_dao.inserir_teste()
-
+        self.espaco_dao = EspacoDAO(self.db)     
+        self.avaliador_dao = AvaliadorDAO(self.db) 
 
     def _sucesso_e_reload(self, mensagem):
         st.success(mensagem)
@@ -23,29 +24,24 @@ class SistemaController:
         st.rerun()
 
     def _formatar_df(self, df):
-        if df.empty:
-            return df
-      
+        if df.empty: return df
         if 'data_inicio' in df.columns:
             df['data_inicio'] = pd.to_datetime(df['data_inicio'])
             df['Início'] = df['data_inicio'].dt.strftime('%d/%m/%Y %H:%M')
-        
         if 'data_fim' in df.columns:
             df['data_fim'] = pd.to_datetime(df['data_fim'])
             df['Fim'] = df['data_fim'].dt.strftime('%d/%m/%Y %H:%M')
-
-        colunas_visiveis = [col for col in ['id_reserva', 'Usuario', 'Sala', 'Início', 'Fim', 'status'] if col in df.columns]
         
-        df_final = df[colunas_visiveis].rename(columns={
-            'id_reserva': 'ID',
-            'status': 'Status'
-        })
-        return df_final
+        cols = [c for c in ['ID', 'Usuario', 'Sala', 'Início', 'Fim', 'status'] if c in df.columns]
+        return df[cols]
+
 
     def tentar_login(self, email, senha):
         usuario = self.usuario_dao.autenticar(email, senha)
         if usuario:
             st.session_state['usuario_logado'] = usuario
+            st.success(f"Bem-vindo, {usuario.get_nome()}!")
+            time.sleep(1)
             st.rerun()
         else:
             st.error("Email ou senha incorretos.")
@@ -55,71 +51,72 @@ class SistemaController:
         st.rerun()
 
     def cadastrar_novo_usuario(self, nome, email, senha, tipo):
-        novo_user = Usuario(email=email, senha=senha, tipo=tipo, nome=nome)
+        novo_user = Usuario(None, nome, email, senha, tipo)
         sucesso, msg = self.usuario_dao.inserir(novo_user)
+        if sucesso:
+            st.success(msg)
+        else:
+            st.error(msg)
+
+    
+    def criar_sala(self, nome, capacidade, descricao):
+        nova_sala = Sala(None, nome, capacidade, descricao)
+        sucesso, msg = self.sala_dao.inserir(nova_sala)
         if sucesso: self._sucesso_e_reload(msg)
         else: st.error(msg)
 
-    def obter_salas(self): return self.sala_dao.listar_todas()
-    def obter_salas_df(self): return self.sala_dao.listar_todas_df()
-
-    def criar_sala(self, nome, cap, desc):
-        sucesso, msg = self.sala_dao.inserir(Sala(None, nome, cap, desc))
-        if sucesso: self._sucesso_e_reload(msg)
-        else: st.error(msg)
-        
-    # --- MÉTODO NOVO PARA ATUALIZAR SALA ---
     def atualizar_sala(self, id_sala, nome, cap, desc):
-        # Cria objeto sala com o ID para atualizar
         sala = Sala(id_sala, nome, cap, desc)
         sucesso, msg = self.sala_dao.atualizar(sala)
         if sucesso: self._sucesso_e_reload(msg)
         else: st.error(msg)
-    # ---------------------------------------
 
     def excluir_sala(self, id_sala):
         sucesso, msg = self.sala_dao.excluir(id_sala)
         if sucesso: self._sucesso_e_reload(msg)
-        else: st.error(msg) # Aqui o controller exibe a mensagem de erro retornada pelo DAO
+        else: st.error(msg)
 
-    def criar_reserva(self, id_user, sala, data, ini, fim):
-        if str(ini) >= str(fim): 
-            st.error("Horário inválido: Fim deve ser maior que início.")
-            return
+    def obter_salas(self):
+        return self.sala_dao.listar_todos()
 
-        fuso_brasilia = timezone(timedelta(hours=-3))
-        agora_brasilia = datetime.now(fuso_brasilia).replace(tzinfo=None)
-        
-        data_hora_reserva = datetime.combine(data, ini)
-        
-        if data_hora_reserva < agora_brasilia:
-            st.error(f"Não é possível agendar para o passado. (Horário atual: {agora_brasilia.strftime('%d/%m/%Y %H:%M')})")
+    def obter_salas_df(self):
+        return self.sala_dao.listar_todos_df()
+
+
+    def criar_reserva(self, id_user, sala_obj, data, ini, fim):
+        if ini >= fim:
+            st.error("Horário final deve ser maior que o inicial.")
             return
 
         dt_ini = f"{data} {ini}"
         dt_fim = f"{data} {fim}"
         
-        sucesso, msg = self.reserva_dao.inserir(id_user, sala.id_sala, dt_ini, dt_fim)
+        nova_reserva = Reserva(
+            id_reserva=None,
+            id_usuario=id_user,
+            id_sala=sala_obj.get_id_sala(),
+            data_inicio=dt_ini,
+            data_fim=dt_fim
+        )
+        
+        sucesso, msg = self.reserva_dao.inserir(nova_reserva)
         if sucesso: self._sucesso_e_reload(msg)
         else: st.error(msg)
 
-    def obter_minhas_reservas(self, id): 
-        df = self.reserva_dao.listar_por_usuario(id)
-        return self._formatar_df(df)
+    def mudar_status_reserva(self, id_reserva, novo_status):
+        if self.reserva_dao.mudar_status(id_reserva, novo_status):
+            self._sucesso_e_reload(f"Reserva {novo_status}!")
+        else:
+            st.error("Erro ao atualizar status.")
 
-    def obter_reservas_pendentes(self): 
-        df = self.reserva_dao.listar_por_status("Pendente")
-        return self._formatar_df(df)
+    def obter_minhas_reservas(self, id_user):
+        return self._formatar_df(self.reserva_dao.listar_por_usuario(id_user))
 
-    def obter_reservas_avaliadas(self): 
-        df = self.reserva_dao.listar_avaliadas()
-        return self._formatar_df(df)
+    def obter_reservas_pendentes(self):
+        return self._formatar_df(self.reserva_dao.listar_por_status("Pendente"))
 
-    def obter_todas_reservas(self): 
-        df = self.reserva_dao.listar_todas_completo()
-        return self._formatar_df(df)
-    
-    def mudar_status_reserva(self, id_res, status):
-        if self.reserva_dao.atualizar_status(id_res, status):
-            self._sucesso_e_reload(f"Reserva {status} com sucesso!")
-        else: st.error("Erro.")
+    def obter_reservas_avaliadas(self):
+        return self._formatar_df(self.reserva_dao.listar_avaliadas())
+        
+    def obter_todas_reservas(self):
+        return self._formatar_df(self.reserva_dao.listar_todas())

@@ -25,6 +25,19 @@ class BancoDados:
                 capacidade INTEGER NOT NULL,
                 descricao VARCHAR(255)
             );""",
+            """CREATE TABLE IF NOT EXISTS Espaco (
+                id_espaco INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome VARCHAR(100) NOT NULL,
+                capacidade INTEGER NOT NULL,
+                descricao VARCHAR(255)
+            );""",
+            """CREATE TABLE IF NOT EXISTS Avaliador (
+                id_avaliador INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome VARCHAR(150) NOT NULL,
+                email VARCHAR(100) NOT NULL UNIQUE,
+                senha VARCHAR(100) NOT NULL,
+                tipo VARCHAR(50) DEFAULT 'Avaliador'
+            );""",
             """CREATE TABLE IF NOT EXISTS Reserva (
                 id_reserva INTEGER PRIMARY KEY AUTOINCREMENT,
                 id_usuario INTEGER NOT NULL,
@@ -36,6 +49,7 @@ class BancoDados:
                 FOREIGN KEY(id_sala) REFERENCES Sala(id_sala)
             );"""
         ]
+        
         for sql in sqls:
             cursor.execute(sql)
         conexao.commit()

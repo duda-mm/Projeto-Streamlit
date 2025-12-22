@@ -7,13 +7,13 @@ class ReservarUI:
     def render(controller):
         st.header("📅 Nova Reserva")
         salas = controller.obter_salas()
+
         opcoes_salas = {str(sala): sala for sala in salas}
         
         if not opcoes_salas:
             st.warning("Nenhuma sala cadastrada.")
             return
 
-       
         fuso_brasilia = timezone(timedelta(hours=-3))
         hoje_brasilia = datetime.datetime.now(fuso_brasilia).date()
 
@@ -27,8 +27,10 @@ class ReservarUI:
                 fim = st.time_input("Hora Fim", datetime.time(10,0))
             
             sala_obj = opcoes_salas[sala_nome]
-            st.caption(f"Info: {sala_obj.descricao}")
+           
+            st.caption(f"Info: {sala_obj.get_descricao()}")
             
             if st.form_submit_button("Solicitar Reserva"):
                 usuario = st.session_state['usuario_logado']
-                controller.criar_reserva(usuario.id_usuario, sala_obj, data, inicio, fim)
+                
+                controller.criar_reserva(usuario.get_id_usuario(), sala_obj, data, inicio, fim)

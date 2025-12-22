@@ -1,19 +1,18 @@
-class Usuario:
-    def __init__(self, id_usuario, nome, email, senha, tipo):
-        self.set_id_usuario(id_usuario)
+class Avaliador:
+    def __init__(self, id_avaliador, nome, email, senha):
+        self.set_id_avaliador(id_avaliador)
         self.set_nome(nome)
         self.set_email(email)
         self.set_senha(senha)
-        self.set_tipo(tipo)
+        self.set_tipo("Avaliador") 
     
-    def set_id_usuario(self, id_usuario):
-        # Permite None para novos cadastros (antes de salvar no banco)
-        if id_usuario is not None and int(id_usuario) < 0: 
+    def set_id_avaliador(self, id_avaliador):
+        if id_avaliador is not None and int(id_avaliador) < 0: 
             raise ValueError('ID inválido')
-        self.__id_usuario = id_usuario
+        self.__id_avaliador = id_avaliador
 
-    def get_id_usuario(self):
-        return self.__id_usuario
+    def get_id_avaliador(self):
+        return self.__id_avaliador
     
     def set_nome(self, nome):
         if not nome or str(nome).strip() == '': 
@@ -38,14 +37,12 @@ class Usuario:
 
     def get_senha(self):
         return self.__senha
-    
+
     def set_tipo(self, tipo):
-        if not tipo or str(tipo).strip() == '': 
-            raise ValueError('Tipo inválido')
         self.__tipo = tipo
 
     def get_tipo(self):
         return self.__tipo
     
     def __str__(self):
-        return f'ID: {self.__id_usuario} | NOME: {self.__nome} | EMAIL: {self.__email} | TIPO: {self.__tipo}'
+        return f'ID: {self.__id_avaliador} | NOME: {self.__nome} | EMAIL: {self.__email} | TIPO: {self.__tipo}'

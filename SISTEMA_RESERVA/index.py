@@ -12,51 +12,45 @@ from templates.avaliador_reservasUI import AvaliadorReservasUI
 st.set_page_config(page_title="Sistema de Reservas", layout="wide")
 
 def main():
-  
     if 'controller' not in st.session_state:
         st.session_state.controller = SistemaController()
     controller = st.session_state.controller
 
-    
     if 'usuario_logado' not in st.session_state:
         st.session_state['usuario_logado'] = None
     usuario = st.session_state['usuario_logado']
 
-   
     if usuario is None:
         tab1, tab2 = st.tabs(["Login", "Criar Conta"])
         with tab1: LoginUI.render(controller)
         with tab2: CadastroUI.render(controller)
     
- 
     else:
-        
         with st.sidebar:
             st.title("Menu Principal")
             
-            
-            st.markdown(f"**{usuario.nome}**")
-            st.caption(f"Cargo: {usuario.tipo}")
+        
+            st.markdown(f"**{usuario.get_nome()}**")
+            st.caption(f"Cargo: {usuario.get_tipo()}")
             st.divider()
             
-            
             opcoes = ["Home"]
+            tipo = usuario.get_tipo()
             
-            if usuario.tipo == "Administrador":
+            if tipo == "Administrador":
                 opcoes += ["Gerenciar Salas", "Todos Agendamentos", "Cadastrar Usuário"]
-            elif usuario.tipo == "Avaliador":
+            elif tipo == "Avaliador":
                 opcoes += ["Reservas Pendentes", "Reservas Avaliadas"]
             else: 
                 opcoes += ["Nova Reserva", "Minhas Reservas"]
 
-          
             escolha = st.selectbox("Selecione a tela:", options=opcoes)
             
             st.divider()
             if st.button("Sair", type="primary"): 
                 controller.logout()
 
- 
+    
         if escolha == "Home": HomeUI.render(controller)
         elif escolha == "Nova Reserva": ReservarUI.render(controller)
         elif escolha == "Minhas Reservas": MinhasReservasUI.render(controller)

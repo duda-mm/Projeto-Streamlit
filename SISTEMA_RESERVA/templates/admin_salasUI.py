@@ -15,7 +15,8 @@ class AdminSalasUI:
         df = controller.obter_salas_df()
         salas_objs = controller.obter_salas()
         
-        opcoes_salas = {sala.id_sala: f"{sala.nome} (Cap: {sala.capacidade})" for sala in salas_objs}
+       
+        opcoes_salas = {sala.get_id_sala(): f"{sala.get_nome()} (Cap: {sala.get_capacidade()})" for sala in salas_objs}
 
         with tab_visualizar:
             st.subheader("Visualizar Salas")
@@ -34,33 +35,31 @@ class AdminSalasUI:
                 submitted = st.form_submit_button("Salvar Sala")
                 if submitted:
                     controller.criar_sala(nome, cap, desc)
-                    # Controller já lida com sucesso/reload
 
         with tab_atualizar:
             st.subheader("Atualizar Sala")
             
             if not salas_objs:
-                st.warning("Não há salas para atualizar.")
+                st.warning("Nenhuma sala para atualizar.")
             else:
                 id_sel_upd = st.selectbox(
-                    "Selecione a Sala para Editar:", 
+                    "Selecione a Sala:", 
                     options=opcoes_salas.keys(), 
                     format_func=lambda x: opcoes_salas[x],
                     key="sb_atualizar"
                 )
                 
-                st.divider()
                 
-                with st.form("form_atualizar_sala"):
-                    sala_atual = next((s for s in salas_objs if s.id_sala == id_sel_upd), None)
-                    
-                    if sala_atual:
-                        novo_nome = st.text_input("Novo Nome", value=sala_atual.nome)
-                        nova_cap = st.number_input("Nova Capacidade", min_value=1, value=sala_atual.capacidade)
-                        nova_desc = st.text_area("Nova Descrição", value=sala_atual.descricao if hasattr(sala_atual, 'descricao') else "")
+                sala_atual = next((s for s in salas_objs if s.get_id_sala() == id_sel_upd), None)
+                
+                if sala_atual:
+                    with st.form("form_atualizar_sala"):
+                        
+                        novo_nome = st.text_input("Novo Nome", value=sala_atual.get_nome())
+                        nova_cap = st.number_input("Nova Capacidade", min_value=1, value=sala_atual.get_capacidade())
+                        nova_desc = st.text_area("Nova Descrição", value=sala_atual.get_descricao())
                         
                         if st.form_submit_button("Confirmar Alterações"):
-                            # CORREÇÃO: Chamada direta sem verificar hasattr, pois o método agora existe
                             controller.atualizar_sala(id_sel_upd, novo_nome, nova_cap, nova_desc)
 
         with tab_excluir:
@@ -82,5 +81,4 @@ class AdminSalasUI:
                 if id_sel_del:
                     st.markdown(f"Tem certeza que deseja excluir **{opcoes_salas[id_sel_del]}**?")
                     if st.button("Confirmar Exclusão", type="primary"):
-                        
                         controller.excluir_sala(id_sel_del)
