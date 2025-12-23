@@ -5,6 +5,7 @@ from templates.cadastroUI import CadastroUI
 from templates.homeUI import HomeUI
 from templates.reservarUI import ReservarUI
 from templates.minhas_reservasUI import MinhasReservasUI
+from templates.gerenciar_reservasUI import GerenciarReservasUI 
 from templates.admin_salasUI import AdminSalasUI
 from templates.admin_reservasUI import AdminReservasUI
 from templates.avaliador_reservasUI import AvaliadorReservasUI
@@ -24,36 +25,33 @@ def main():
         tab1, tab2 = st.tabs(["Login", "Criar Conta"])
         with tab1: LoginUI.render(controller)
         with tab2: CadastroUI.render(controller)
-    
     else:
         with st.sidebar:
             st.title("Menu Principal")
-            
-        
             st.markdown(f"**{usuario.get_nome()}**")
             st.caption(f"Cargo: {usuario.get_tipo()}")
             st.divider()
             
             opcoes = ["Home"]
-            tipo = usuario.get_tipo()
             
-            if tipo == "Administrador":
+            if usuario.get_tipo() == "Administrador":
                 opcoes += ["Gerenciar Salas", "Todos Agendamentos", "Cadastrar Usuário"]
-            elif tipo == "Avaliador":
+            elif usuario.get_tipo() == "Avaliador":
                 opcoes += ["Reservas Pendentes", "Reservas Avaliadas"]
             else: 
-                opcoes += ["Nova Reserva", "Minhas Reservas"]
+              
+                opcoes += ["Nova Reserva", "Minhas Reservas", "Gerenciar Reservas"]
 
-            escolha = st.selectbox("Selecione a tela:", options=opcoes)
+            escolha = st.selectbox("Navegação:", options=opcoes)
             
             st.divider()
             if st.button("Sair", type="primary"): 
                 controller.logout()
 
-    
         if escolha == "Home": HomeUI.render(controller)
         elif escolha == "Nova Reserva": ReservarUI.render(controller)
         elif escolha == "Minhas Reservas": MinhasReservasUI.render(controller)
+        elif escolha == "Gerenciar Reservas": GerenciarReservasUI.render(controller)
         elif escolha == "Gerenciar Salas": AdminSalasUI.render(controller)
         elif escolha == "Todos Agendamentos": AdminReservasUI.render(controller)
         elif escolha == "Cadastrar Usuário": CadastroUI.render(controller)

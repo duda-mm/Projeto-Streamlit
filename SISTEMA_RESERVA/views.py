@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 import time
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from models.banco import BancoDados
-from models.dao import UsuarioDAO, SalaDAO, ReservaDAO, EspacoDAO, AvaliadorDAO
+from models.dao import UsuarioDAO, SalaDAO, ReservaDAO
 from models.usuario import Usuario
 from models.sala import Sala
 from models.reserva import Reserva
@@ -15,25 +15,49 @@ class SistemaController:
         self.usuario_dao = UsuarioDAO(self.db)
         self.sala_dao = SalaDAO(self.db)
         self.reserva_dao = ReservaDAO(self.db)
-        self.espaco_dao = EspacoDAO(self.db)     
-        self.avaliador_dao = AvaliadorDAO(self.db) 
+
 
     def _sucesso_e_reload(self, mensagem):
         st.success(mensagem)
-        time.sleep(1.0)
+        time.sleep(1.2)
         st.rerun()
+
+    def _pode_alterar_cancelar(self, data_inicio_reserva):
+        """Verifica se a ação está sendo feita com 7 dias de antecedência"""
+      
+        if isinstance(data_inicio_reserva, str):
+            try:
+                data_reserva = datetime.strptime(data_inicio_reserva, '%Y-%m-%d %H:%M:%S')
+            except:
+              
+                data_reserva = pd.to_datetime(data_inicio_reserva)
+        else:
+            data_reserva = data_inicio_reserva
+
+        agora = datetime.now()
+        prazo_minimo = agora + timedelta(days=7)
+        
+        
+        if data_reserva < prazo_minimo:
+            return False
+        return True
 
     def _formatar_df(self, df):
         if df.empty: return df
-        if 'data_inicio' in df.columns:
-            df['data_inicio'] = pd.to_datetime(df['data_inicio'])
-            df['Início'] = df['data_inicio'].dt.strftime('%d/%m/%Y %H:%M')
-        if 'data_fim' in df.columns:
-            df['data_fim'] = pd.to_datetime(df['data_fim'])
-            df['Fim'] = df['data_fim'].dt.strftime('%d/%m/%Y %H:%M')
         
-        cols = [c for c in ['ID', 'Usuario', 'Sala', 'Início', 'Fim', 'status'] if c in df.columns]
-        return df[cols]
+        df_visual = df.copy()
+        
+        if 'data_inicio' in df_visual.columns:
+            df_visual['data_inicio'] = pd.to_datetime(df_visual['data_inicio'])
+            df_visual['Início'] = df_visual['data_inicio'].dt.strftime('%d/%m/%Y %H:%M')
+        
+        if 'data_fim' in df_visual.columns:
+            df_visual['data_fim'] = pd.to_datetime(df_visual['data_fim'])
+            df_visual['Fim'] = df_visual['data_fim'].dt.strftime('%d/%m/%Y %H:%M')
+            
+        cols = [c for c in ['ID', 'Usuario', 'Sala', 'Início', 'Fim', 'status'] if c in df_visual.columns]
+        if not cols: return df 
+        return df_visual[cols]
 
 
     def tentar_login(self, email, senha):
@@ -53,12 +77,10 @@ class SistemaController:
     def cadastrar_novo_usuario(self, nome, email, senha, tipo):
         novo_user = Usuario(None, nome, email, senha, tipo)
         sucesso, msg = self.usuario_dao.inserir(novo_user)
-        if sucesso:
-            st.success(msg)
-        else:
-            st.error(msg)
+        if sucesso: st.success(msg)
+        else: st.error(msg)
 
-    
+   
     def criar_sala(self, nome, capacidade, descricao):
         nova_sala = Sala(None, nome, capacidade, descricao)
         sucesso, msg = self.sala_dao.inserir(nova_sala)
@@ -91,6 +113,11 @@ class SistemaController:
         dt_ini = f"{data} {ini}"
         dt_fim = f"{data} {fim}"
         
+        data_hora_reserva = datetime.combine(data, ini)
+        if data_hora_reserva < datetime.now():
+             st.error("Não é possível agendar para o passado.")
+             return
+        
         nova_reserva = Reserva(
             id_reserva=None,
             id_usuario=id_user,
@@ -103,12 +130,44 @@ class SistemaController:
         if sucesso: self._sucesso_e_reload(msg)
         else: st.error(msg)
 
+ 
+    def atualizar_reserva(self, id_reserva, id_sala, data, ini, fim, data_original):
+        if not self._pode_alterar_cancelar(data_original):
+            st.error("Ação bloqueada pelo sistema: Necessário 7 dias de antecedência.")
+            return
+
+        if ini >= fim:
+            st.error("Horário final deve ser maior que o inicial.")
+            return
+
+        dt_ini = f"{data} {ini}"
+        dt_fim = f"{data} {fim}"
+
+        sucesso, msg = self.reserva_dao.atualizar_datas(id_reserva, id_sala, dt_ini, dt_fim)
+        if sucesso: self._sucesso_e_reload(msg)
+        else: st.error(msg)
+
+  
+    def excluir_reserva(self, id_reserva, data_original):
+        if not self._pode_alterar_cancelar(data_original):
+            st.error("Ação bloqueada pelo sistema: Necessário 7 dias de antecedência.")
+            return
+        
+        sucesso, msg = self.reserva_dao.excluir(id_reserva)
+        if sucesso: self._sucesso_e_reload(msg)
+        else: st.error(msg)
+
     def mudar_status_reserva(self, id_reserva, novo_status):
         if self.reserva_dao.mudar_status(id_reserva, novo_status):
             self._sucesso_e_reload(f"Reserva {novo_status}!")
         else:
             st.error("Erro ao atualizar status.")
 
+    
+    def obter_minhas_reservas_raw(self, id_user):
+        return self.reserva_dao.listar_por_usuario(id_user)
+
+   
     def obter_minhas_reservas(self, id_user):
         return self._formatar_df(self.reserva_dao.listar_por_usuario(id_user))
 

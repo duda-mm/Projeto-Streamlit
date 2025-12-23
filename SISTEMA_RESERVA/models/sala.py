@@ -30,7 +30,7 @@ class Sala:
         return self.__capacidade
     
     def set_descricao(self, descricao):
-        # Se vier None, define como string vazia para não quebrar
+     
         self.__descricao = descricao if descricao else ""
 
     def get_descricao(self):

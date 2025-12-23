@@ -7,7 +7,7 @@ class Usuario:
         self.set_tipo(tipo)
     
     def set_id_usuario(self, id_usuario):
-        # Permite None para novos cadastros (antes de salvar no banco)
+        
         if id_usuario is not None and int(id_usuario) < 0: 
             raise ValueError('ID inválido')
         self.__id_usuario = id_usuario

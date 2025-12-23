@@ -162,7 +162,6 @@ class EspacoDAO:
     def excluir(self, id_espaco):
         conn = self.db_manager.conectar()
         try:
-           
             cursor = conn.cursor()
             cursor.execute("DELETE FROM Espaco WHERE id_espaco = ?", (id_espaco,))
             conn.commit()
@@ -235,6 +234,49 @@ class ReservaDAO:
         finally:
             conn.close()
 
+    def atualizar_datas(self, id_reserva, id_sala, nova_dt_inicio, nova_dt_fim):
+        conn = self.db_manager.conectar()
+        try:
+            sql_check = """
+                SELECT COUNT(*) FROM Reserva 
+                WHERE id_sala = ? AND id_reserva != ? AND status != 'Negada'
+                AND (
+                    (data_inicio < ? AND data_fim > ?) OR
+                    (data_inicio >= ? AND data_inicio < ?) OR
+                    (data_fim > ? AND data_fim <= ?)
+                )
+            """
+            params = (
+                id_sala, id_reserva,
+                nova_dt_fim, nova_dt_inicio,
+                nova_dt_inicio, nova_dt_fim,
+                nova_dt_inicio, nova_dt_fim
+            )
+            cursor = conn.cursor()
+            cursor.execute(sql_check, params)
+            if cursor.fetchone()[0] > 0:
+                return False, "O novo horário solicitado já está ocupado."
+
+            sql_update = "UPDATE Reserva SET data_inicio=?, data_fim=?, status='Pendente' WHERE id_reserva=?"
+            conn.execute(sql_update, (nova_dt_inicio, nova_dt_fim, id_reserva))
+            conn.commit()
+            return True, "Reserva atualizada com sucesso!"
+        except Exception as e:
+            return False, f"Erro ao atualizar: {e}"
+        finally:
+            conn.close()
+
+    def excluir(self, id_reserva):
+        conn = self.db_manager.conectar()
+        try:
+            conn.execute("DELETE FROM Reserva WHERE id_reserva=?", (id_reserva,))
+            conn.commit()
+            return True, "Reserva cancelada com sucesso."
+        except Exception as e:
+            return False, f"Erro ao excluir: {e}"
+        finally:
+            conn.close()
+
     def mudar_status(self, id_reserva, novo_status):
         conn = self.db_manager.conectar()
         try:
@@ -249,7 +291,7 @@ class ReservaDAO:
     def _listar_base(self, where_clause="", params=()):
         conn = self.db_manager.conectar()
         sql = f"""
-            SELECT r.id_reserva as ID, u.nome as Usuario, s.nome as Sala, 
+            SELECT r.id_reserva as ID, r.id_sala, u.nome as Usuario, s.nome as Sala, 
                    r.data_inicio, r.data_fim, r.status 
             FROM Reserva r 
             JOIN Sala s ON r.id_sala = s.id_sala 
