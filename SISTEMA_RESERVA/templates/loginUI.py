@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 class LoginUI:
     @staticmethod
@@ -11,4 +12,11 @@ class LoginUI:
             submit = st.form_submit_button("Entrar")
             
             if submit:
-                controller.tentar_login(email, senha)
+                usuario = controller.tentar_login(email, senha)
+                if usuario:
+                    st.session_state['usuario_logado'] = usuario
+                    st.success(f"Bem-vindo, {usuario.get_nome()}!")
+                    time.sleep(1)
+                    st.rerun()
+                else:
+                    st.error("Email ou senha incorretos.")

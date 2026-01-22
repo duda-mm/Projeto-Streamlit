@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 class AdminSalasUI:
     @staticmethod
@@ -34,7 +35,13 @@ class AdminSalasUI:
                 
                 submitted = st.form_submit_button("Salvar Sala")
                 if submitted:
-                    controller.criar_sala(nome, cap, desc)
+                    sucesso, msg = controller.criar_sala(nome, cap, desc)
+                    if sucesso:
+                        st.success(msg)
+                        time.sleep(1.2)
+                        st.rerun()
+                    else:
+                        st.error(msg)
 
         with tab_atualizar:
             st.subheader("Atualizar Sala")
@@ -49,7 +56,6 @@ class AdminSalasUI:
                     key="sb_atualizar"
                 )
                 
-                
                 sala_atual = next((s for s in salas_objs if s.get_id_sala() == id_sel_upd), None)
                 
                 if sala_atual:
@@ -60,7 +66,13 @@ class AdminSalasUI:
                         nova_desc = st.text_area("Nova Descrição", value=sala_atual.get_descricao())
                         
                         if st.form_submit_button("Confirmar Alterações"):
-                            controller.atualizar_sala(id_sel_upd, novo_nome, nova_cap, nova_desc)
+                            sucesso, msg = controller.atualizar_sala(id_sel_upd, novo_nome, nova_cap, nova_desc)
+                            if sucesso:
+                                st.success(msg)
+                                time.sleep(1.2)
+                                st.rerun()
+                            else:
+                                st.error(msg)
 
         with tab_excluir:
             st.subheader("Excluir Sala")
@@ -81,4 +93,10 @@ class AdminSalasUI:
                 if id_sel_del:
                     st.markdown(f"Tem certeza que deseja excluir **{opcoes_salas[id_sel_del]}**?")
                     if st.button("Confirmar Exclusão", type="primary"):
-                        controller.excluir_sala(id_sel_del)
+                        sucesso, msg = controller.excluir_sala(id_sel_del)
+                        if sucesso:
+                            st.success(msg)
+                            time.sleep(1.2)
+                            st.rerun()
+                        else:
+                            st.error(msg)

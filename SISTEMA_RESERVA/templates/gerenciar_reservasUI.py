@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import datetime
+import time
 from datetime import timedelta
 
 class GerenciarReservasUI:
@@ -65,7 +66,7 @@ class GerenciarReservasUI:
                                 novo_fim = st.time_input("Novo Fim", value=pd.to_datetime(reserva_sel['data_fim']).time())
                             
                             if st.form_submit_button("Salvar Alteração"):
-                                controller.atualizar_reserva(
+                                sucesso, msg = controller.atualizar_reserva(
                                     id_selecionado, 
                                     reserva_sel['id_sala'], 
                                     nova_data, 
@@ -73,8 +74,20 @@ class GerenciarReservasUI:
                                     novo_fim,
                                     data_inicio_reserva
                                 )
+                                if sucesso:
+                                    st.success(msg)
+                                    time.sleep(1.2)
+                                    st.rerun()
+                                else:
+                                    st.error(msg)
 
                     with tab_del:
                         st.write(f"Deseja cancelar: **{opcoes_reservas[id_selecionado]}**?")
                         if st.button("Confirmar Cancelamento", type="primary"):
-                            controller.excluir_reserva(id_selecionado, data_inicio_reserva)
+                            sucesso, msg = controller.excluir_reserva(id_selecionado, data_inicio_reserva)
+                            if sucesso:
+                                st.success(msg)
+                                time.sleep(1.2)
+                                st.rerun()
+                            else:
+                                st.error(msg)

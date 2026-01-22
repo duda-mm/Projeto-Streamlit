@@ -15,6 +15,10 @@ class CadastroUI:
             
             if submit:
                 if nome and email and senha:
-                    controller.cadastrar_novo_usuario(nome, email, senha, tipo)
+                    sucesso, msg = controller.cadastrar_novo_usuario(nome, email, senha, tipo)
+                    if sucesso:
+                        st.success(msg)
+                    else:
+                        st.error(msg)
                 else:
                     st.warning("Preencha todos os campos.")

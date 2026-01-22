@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 
 class AvaliadorReservasUI:
     @staticmethod
@@ -18,10 +19,22 @@ class AvaliadorReservasUI:
                     st.caption(f"De: {row['Início']} | Até: {row['Fim']}")
                 with c2:
                     if st.button("✅ Aprovar", key=f"ok_{row['ID']}"):
-                        controller.mudar_status_reserva(row['ID'], "Confirmada")
+                        sucesso, msg = controller.mudar_status_reserva(row['ID'], "Confirmada")
+                        if sucesso:
+                            st.success(msg)
+                            time.sleep(1.2)
+                            st.rerun()
+                        else:
+                            st.error(msg)
                 with c3:
                     if st.button("❌ Negar", key=f"no_{row['ID']}"):
-                        controller.mudar_status_reserva(row['ID'], "Negada")
+                        sucesso, msg = controller.mudar_status_reserva(row['ID'], "Negada")
+                        if sucesso:
+                            st.success(msg)
+                            time.sleep(1.2)
+                            st.rerun()
+                        else:
+                            st.error(msg)
 
     @staticmethod
     def render_historico(controller):

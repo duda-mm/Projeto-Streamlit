@@ -1,6 +1,7 @@
 import streamlit as st
 import datetime
 from datetime import timedelta, timezone
+import time
 
 class ReservarUI:
     @staticmethod
@@ -14,6 +15,7 @@ class ReservarUI:
             st.warning("Nenhuma sala cadastrada.")
             return
 
+        # Define Fuso Horário de Brasília para a Interface
         fuso_brasilia = timezone(timedelta(hours=-3))
         hoje_brasilia = datetime.datetime.now(fuso_brasilia).date()
 
@@ -21,6 +23,7 @@ class ReservarUI:
             c1, c2 = st.columns(2)
             with c1:
                 sala_nome = st.selectbox("Escolha a Sala", list(opcoes_salas.keys()))
+                # Define o valor mínimo e o valor padrão como a data de hoje no Brasil
                 data = st.date_input("Data da Reserva", min_value=hoje_brasilia, value=hoje_brasilia)
             with c2:
                 inicio = st.time_input("Hora Início", datetime.time(9,0))
@@ -33,4 +36,12 @@ class ReservarUI:
             if st.form_submit_button("Solicitar Reserva"):
                 usuario = st.session_state['usuario_logado']
                 
-                controller.criar_reserva(usuario.get_id_usuario(), sala_obj, data, inicio, fim)
+                # Chama o controller e recebe a resposta (Sucesso, Mensagem)
+                sucesso, msg = controller.criar_reserva(usuario.get_id_usuario(), sala_obj, data, inicio, fim)
+                
+                if sucesso:
+                    st.success(msg)
+                    time.sleep(1.2)
+                    st.rerun()
+                else:
+                    st.error(msg)

@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from views import SistemaController
 from templates.loginUI import LoginUI
 from templates.cadastroUI import CadastroUI
@@ -45,8 +46,10 @@ def main():
             escolha = st.selectbox("Navegação:", options=opcoes)
             
             st.divider()
-            if st.button("Sair", type="primary"): 
-                controller.logout()
+            if st.sidebar.button("Sair"):
+                st.session_state['usuario_logado'] = None
+                time.sleep(1)
+                st.rerun()
 
         if escolha == "Home": HomeUI.render(controller)
         elif escolha == "Nova Reserva": ReservarUI.render(controller)
