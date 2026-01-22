@@ -10,6 +10,7 @@ from templates.gerenciar_reservasUI import GerenciarReservasUI
 from templates.admin_salasUI import AdminSalasUI
 from templates.admin_reservasUI import AdminReservasUI
 from templates.avaliador_reservasUI import AvaliadorReservasUI
+from templates.perfilUI import PerfilUI  # <--- NOVA IMPORTAÇÃO
 
 st.set_page_config(page_title="Sistema de Reservas", layout="wide")
 
@@ -33,14 +34,14 @@ def main():
             st.caption(f"Cargo: {usuario.get_tipo()}")
             st.divider()
             
-            opcoes = ["Home"]
+            
+            opcoes = ["Home", "Meus Dados"]
             
             if usuario.get_tipo() == "Administrador":
                 opcoes += ["Gerenciar Salas", "Todos Agendamentos", "Cadastrar Usuário"]
             elif usuario.get_tipo() == "Avaliador":
                 opcoes += ["Reservas Pendentes", "Reservas Avaliadas"]
             else: 
-              
                 opcoes += ["Nova Reserva", "Minhas Reservas", "Gerenciar Reservas"]
 
             escolha = st.selectbox("Navegação:", options=opcoes)
@@ -48,10 +49,11 @@ def main():
             st.divider()
             if st.sidebar.button("Sair"):
                 st.session_state['usuario_logado'] = None
-                time.sleep(1)
+                time.sleep(0.5)
                 st.rerun()
 
         if escolha == "Home": HomeUI.render(controller)
+        elif escolha == "Meus Dados": PerfilUI.render(controller) # <--- AQUI
         elif escolha == "Nova Reserva": ReservarUI.render(controller)
         elif escolha == "Minhas Reservas": MinhasReservasUI.render(controller)
         elif escolha == "Gerenciar Reservas": GerenciarReservasUI.render(controller)

@@ -7,6 +7,13 @@ from models.sala import Sala
 from models.reserva import Reserva
 
 class SistemaController:
+    def atualizar_usuario(self, id_usuario, nome, email, senha, tipo_original):
+        # Cria um objeto temporário com os novos dados
+        usuario_atualizado = Usuario(id_usuario, nome, email, senha, tipo_original)
+        
+        sucesso, msg = self.usuario_dao.atualizar(usuario_atualizado)
+        return sucesso, msg, usuario_atualizado
+    
     def __init__(self):
         self.db = BancoDados()
         self.db.criar_tabelas() 

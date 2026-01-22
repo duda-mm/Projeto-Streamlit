@@ -24,6 +24,25 @@ class UsuarioDAO:
         finally:
             conn.close()
 
+    def atualizar(self, usuario):
+        conn = self.db_manager.conectar()
+        try:
+            # Verifica se o email novo já existe em OUTRO usuário
+            cursor = conn.cursor()
+            sql_check = "SELECT count(*) FROM Usuario WHERE email = ? AND id_usuario != ?"
+            cursor.execute(sql_check, (usuario.get_email(), usuario.get_id_usuario()))
+            if cursor.fetchone()[0] > 0:
+                 return False, "Este e-mail já está em uso por outro usuário."
+
+            sql = "UPDATE Usuario SET nome=?, email=?, senha=? WHERE id_usuario=?"
+            conn.execute(sql, (usuario.get_nome(), usuario.get_email(), usuario.get_senha(), usuario.get_id_usuario()))
+            conn.commit()
+            return True, "Dados atualizados com sucesso!"
+        except Exception as e:
+            return False, f"Erro: {e}"
+        finally:
+            conn.close()
+
     def autenticar(self, email, senha):
         conn = self.db_manager.conectar()
         cursor = conn.cursor()
