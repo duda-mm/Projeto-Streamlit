@@ -23,3 +23,17 @@ Documentação do projeto desenvolvido como atividade da disciplina de POO, APOO
 |Carolina Costa  |20241011110037 |
 |Eduarda Medeiros|20241011110014 |
 |Eduarda Moura   |20241011110021 |
+
+## Como executar o projeto
+
+### Pré-requisitos
+- Python instalado
+- Streamlit instalado (`pip install streamlit`)
+  
+Este projeto foi desenvolvido com **Streamlit** e deve ser executado pelo terminal. Para executar o projeto, utilize o comando abaixo no terminal:
+
+```bash
+streamlit run SISTEMA_RESERVA/index.py
+
+
+
